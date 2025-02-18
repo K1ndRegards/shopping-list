@@ -1,0 +1,222 @@
+/* ####### */
+/* Imports */
+/* ####### */
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+/* ################# */
+/* Custom Properties */
+/* ################# */
+:root {
+  --primary-dark: #333;
+  --secondary-dark: #515151;
+  --tertiary-dark: #cccccc;
+  --primary-light: #fff;
+  --secondary-light: #f5f5f5;
+  --tertiary-light: #f1f1f1;
+}
+
+/* ############### */
+/* General Styling */
+/* ############### */
+
+/* ######### */
+/* Utilities */
+/* ######### */
+
+.container {
+  margin: 50px auto 0;
+  max-width: 450px;
+}
+
+.visually-hidden {
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  height: 1px;
+  overflow: hidden;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
+}
+
+/* ############ */
+/* Main Styling */
+/* ############ */
+
+body {
+  background-color: var(--secondary-light);
+  font-family: 'Poppins', sans-serif;
+  color: var(--secondary-dark);
+}
+
+main.main-content {
+  /* Header Styling */
+  .header {
+    display: flex;
+    align-items: center;
+  }
+
+  .header img {
+    margin-right: 10px;
+    width: 60px;
+  }
+
+  .header h1 {
+    font-size: 3.2rem;
+    font-weight: 300;
+  }
+
+  /* Item Input Styling */
+  .item-form {
+    margin-top: 20px;
+  }
+
+  .item-form .form-group input {
+    padding: 10px;
+    border: 1px solid var(--tertiary-dark);
+    border-radius: 5px;
+    outline: none;
+    width: 100%;
+    font-size: 1.6rem;
+  }
+
+  /* Add Button Styling */
+  .item-form button {
+    margin-top: 20px;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    background-color: var(--primary-dark);
+    cursor: pointer;
+    font-size: 1.2rem;
+    color: #fff;
+  }
+
+  .item-form button.edit-mode {
+    background-color: #228b22;
+    color: #fff;
+  }
+
+  .item-form button i {
+    margin-right: 5px;
+  }
+
+  /* List Context Styling */
+  .list-context {
+    margin-top: 20px;
+
+    /* Sort Field Styling */
+    .align-right {
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .sort {
+      border-radius: 5px;
+      border: 1px solid var(--tertiary-dark);
+      outline: none;
+      padding: 5px;
+      font-size: 1.4rem;
+      background-color: var(--secondary-light);
+
+      &:hover {
+        background-color: var(--tertiary-light);
+      }
+    }
+
+    /* Filter Styling */
+    .filter-field input {
+      margin-top: 20px;
+      border: none;
+      border-bottom: 1px solid var(--tertiary-dark);
+      outline: none;
+      padding: 10px 5px;
+      width: 100%;
+      background-color: var(--secondary-light);
+      font-size: 1.6rem;
+    }
+
+    /* Shopping List Styling */
+    .shopping-list {
+      display: flex;
+      column-gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    /* Empty List Heading Styling */
+    .shopping-list h2.empty {
+      margin: 40px auto 0;
+      font-size: 2.6rem;
+      color: var(--tertiary-dark);
+    }
+
+    /* List Item Styling */
+    .shopping-list li {
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      position: relative;
+      margin-top: 30px;
+      border: 1px solid var(--tertiary-dark);
+      border-radius: 5px;
+      padding-left: 10px;
+      width: calc(50% - 5px);
+      height: 45px;
+      font-size: 1.5rem;
+      color: #000;
+      font-weight: 600;
+    }
+
+    li input.edit-mode {
+      border: none;
+      outline: none;
+      padding-left: -15px;
+      background: transparent;
+      font-size: 1.5rem;
+      font-weight: 600;
+      font-family: inherit;
+    }
+
+    li input.edit-mode + i.fa-solid.fa-check {
+      color: #059405;
+    }
+
+    .shopping-list li i {
+      position: absolute;
+      top: 14px;
+      right: 10px;
+      color: #ff0000;
+      cursor: pointer;
+    }
+
+    .shopping-list li span.date {
+      position: absolute;
+      top: -15px;
+      right: 5px;
+      color: var(--secondary-dark);
+      font-size: 1.2rem;
+    }
+
+    /* Clear button styling */
+    .clear-btn {
+      margin-top: 40px;
+      border: 1px solid var(--tertiary-dark);
+      outline: none;
+      padding: 10px 0;
+      width: 100%;
+      background-color: var(--secondary-light);
+      cursor: pointer;
+      font-size: 1.4rem;
+
+      &:hover {
+        background-color: var(--tertiary-light);
+      }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  main.main-content .list-context .shopping-list li {
+    width: 100%;
+  }
+}

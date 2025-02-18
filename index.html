@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Shopping List Project</title>
+
+    <!-- CSS Reset File -->
+    <link rel="stylesheet" href="css/reset.css" />
+    <!-- Main CSS File -->
+    <link rel="stylesheet" href="css/style.css" />
+
+    <!-- Fontawesome -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+      integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+  </head>
+  <body>
+    <main class="main-content">
+      <div class="container">
+        <!-- Header Markup -->
+        <header class="header">
+          <img src="img/note.png" alt="Notebook picture" />
+          <h1>Shopping List</h1>
+        </header>
+
+        <!-- Item input field -->
+        <form class="item-form">
+          <!-- Item input -->
+          <div class="form-group">
+            <label for="text" class="visually-hidden">Enter Item</label>
+            <input
+              type="text"
+              name="text"
+              id="text"
+              placeholder="Enter Item"
+              maxlength="12"
+            />
+          </div>
+
+          <!-- Submit button -->
+          <button type="submit" id="submit">
+            <i class="fa-solid fa-plus"></i>Add Item
+          </button>
+        </form>
+
+        <section class="list-context" id="list-context">
+          <!-- Sorting input field -->
+          <!-- <div class="align-right">
+            <select name="sort" id="sort" class="sort">
+              <option value="" disabled selected>Sort Items</option>
+              <option value="a-z">a-z</option>
+              <option value="z-a">z-a</option>
+              <option value="newest">Newest first</option>
+              <option value="oldest">Oldest First</option>
+            </select>
+          </div> -->
+
+          <!-- Filter field -->
+          <!-- <div class="filter-field">
+            <label for="filter" class="visually-hidden">Filter Items</label>
+            <input
+              type="text"
+              name="filter"
+              id="filter"
+              placeholder="Filter Items"
+            />
+          </div> -->
+
+          <!-- Shopping List -->
+          <!-- <ul class="shopping-list">
+            <li class="list-item">
+              <input
+                type="text"
+                class="edit-mode"
+                value="bananas"
+                maxlength="12"
+              />
+              <i class="fa-solid fa-xmark"></i>
+              <span class="date">2025.02.08 20:51:00</span>
+            </li>
+            <li class="list-item">
+              <span class="text">Bananas</span>
+              <i class="fa-solid fa-xmark"></i>
+              <span class="date">2025.02.08 20:51:00</span>
+            </li>
+            <li class="list-item">
+              <span class="text">Orange Juice</span>
+              <i class="fa-solid fa-xmark"></i>
+              <span class="date">2025.02.08 20:51:00</span>
+            </li>
+          </ul> -->
+
+          <!-- Clear Button -->
+          <!-- <button class="clear-btn" id="clear">Clear All</button> -->
+        </section>
+      </div>
+    </main>
+    <script src="js/script.js"></script>
+  </body>
+</html>
