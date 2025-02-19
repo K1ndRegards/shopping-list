@@ -147,10 +147,10 @@ main.main-content {
 
     /* List Item Styling */
     .shopping-list li {
+      position: relative;
       display: flex;
       justify-content: flex-start;
       align-items: center;
-      position: relative;
       margin-top: 30px;
       border: 1px solid var(--tertiary-dark);
       border-radius: 5px;

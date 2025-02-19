@@ -205,6 +205,46 @@ function filterItems() {
   }
 }
 
+// Function to remove list item when clicking 'X' icon
+function removeListItem(e) {
+  const list = document.querySelector('.shopping-list');
+  const item = e.target;
+  // if our target is 'X' icon
+  if (item.tagName === 'I' && item.className === 'fa-solid fa-xmark') {
+    // removing parent element
+    const listItem = e.target.parentElement;
+
+    // as well as the element in the local storage
+    const text = listItem.querySelector('span.text').textContent;
+    const date = listItem.querySelector('span.date').textContent;
+    removeItemFromLocalStorage(text, date);
+
+    listItem.remove();
+
+    // if list is empty, remove list context
+    if (list.children.length === 0) {
+      clearContext();
+    }
+  }
+}
+
+// Function to remove all list items
+function removeAllListItems() {
+  const list = document.querySelector('.shopping-list');
+
+  listItems = list.querySelectorAll('li');
+
+  listItems.forEach((item) => {
+    const text = item.querySelector('span.text').textContent;
+    const date = item.querySelector('span.date').textContent;
+    removeItemFromLocalStorage(text, date);
+
+    item.remove();
+  });
+
+  clearContext();
+}
+
 // Function that fills shopping list context
 // with UI items
 function fillContext() {
@@ -216,12 +256,12 @@ function fillContext() {
 
   const list = createList();
   // function to remove list item on 'X' icon click
-  // list.addEventListener('click', ...);
+  list.addEventListener('click', removeListItem);
   // function to edit list item on click
   // list.addEventListener('click', ...);
 
   const clearButton = createClearButton();
-  // clearButton.addEventListener('click', clearContext);
+  clearButton.addEventListener('click', removeAllListItems);
 
   listContext.appendChild(sortField);
   listContext.appendChild(filterField);
@@ -256,11 +296,14 @@ function addItemToLocalStorage(text, date) {
 }
 
 function removeItemFromLocalStorage(text, date) {
+  console.log('running this command');
   let itemsFromStorage = getItemsFromLocalStorage();
 
-  for ([itemText, itemDate] of itemsFromStorage) {
-    console.log(itemText, itemDate);
-  }
+  itemsFromStorage = itemsFromStorage.filter(([itemText, itemDate]) => {
+    return itemText !== text || itemDate !== date;
+  });
+
+  localStorage.setItem('items', JSON.stringify(itemsFromStorage));
 }
 
 // Function to add list item to the shopping list
@@ -273,6 +316,12 @@ function addListItem(text) {
   list.appendChild(newItem);
 }
 
+// Function to remove list context
+function clearContext() {
+  Array.from(listContext.children).forEach((child) => {
+    child.remove();
+  });
+}
 // DOM elements
 const userInput = document.getElementById('text');
 const submitButton = document.getElementById('submit');
@@ -298,5 +347,21 @@ submitButton.addEventListener('click', function (e) {
   } else {
     // If context UI persist, adding list item to the list
     addListItem(newItem);
+  }
+});
+
+// Load all the items from local storage if any is there
+document.addEventListener('DOMContentLoaded', function () {
+  const items = getItemsFromLocalStorage();
+
+  if (items.length !== 0) {
+    fillContext();
+
+    list = document.querySelector('.shopping-list');
+
+    items.forEach(([itemText, itemDate]) => {
+      newItem = createListItem(itemText, itemDate);
+      list.appendChild(newItem);
+    });
   }
 });
