@@ -81,7 +81,7 @@ main.main-content {
   }
 
   /* Add Button Styling */
-  .item-form button {
+  .item-form .submit-button button {
     margin-top: 20px;
     border: none;
     border-radius: 5px;
@@ -92,12 +92,7 @@ main.main-content {
     color: #fff;
   }
 
-  .item-form button.edit-mode {
-    background-color: #228b22;
-    color: #fff;
-  }
-
-  .item-form button i {
+  .item-form .submit-button button i {
     margin-right: 5px;
   }
 
@@ -106,7 +101,7 @@ main.main-content {
     margin-top: 20px;
 
     /* Sort Field Styling */
-    .align-right {
+    .sorting-field {
       display: flex;
       justify-content: flex-end;
     }
@@ -198,7 +193,7 @@ main.main-content {
     }
 
     /* Clear button styling */
-    .clear-btn {
+    .clear-button .clear-btn {
       margin-top: 40px;
       border: 1px solid var(--tertiary-dark);
       outline: none;
