@@ -12,11 +12,11 @@ function getFormattedDate() {
   return `${year}.${month}.${day} ${hours}:${minutes}:${seconds}`;
 }
 
-// Item Creation
-// sorting field
+// List context UI element creation
+// Sorting field
 function createSortField() {
   const div = document.createElement('div');
-  div.className = 'align-right';
+  div.className = 'sorting-field';
 
   const select = document.createElement('select');
   select.name = 'sort';
@@ -50,7 +50,7 @@ function createSortField() {
   return div;
 }
 
-// filter field
+// Filter field
 function createFilterField() {
   const div = document.createElement('div');
   div.className = 'filter-field';
@@ -65,17 +65,7 @@ function createFilterField() {
   return div;
 }
 
-// clear button
-function createClearButton() {
-  const button = document.createElement('button');
-  button.className = 'clear-btn';
-  button.id = 'clear';
-  button.textContent = 'Clear All';
-
-  return button;
-}
-
-// shopping item list
+// Shopping item list
 function createList() {
   const list = document.createElement('ul');
   list.className = 'shopping-list';
@@ -84,8 +74,47 @@ function createList() {
   return list;
 }
 
-// list item
-function createListItem(text) {
+// Clear button
+function createClearButton() {
+  const div = document.createElement('div');
+  div.className = 'clear-button';
+
+  const button = document.createElement('button');
+  button.className = 'clear-btn';
+  button.id = 'clear';
+  button.textContent = 'Clear All';
+
+  div.appendChild(button);
+
+  return div;
+}
+
+// edit mode list item
+function createEditModeListItem(text, date) {
+  const li = document.createElement('li');
+  li.className = 'list-item';
+
+  const input = document.createElement('input');
+  input.className = 'edit-mode';
+  input.value = text;
+  input.maxLength = '12';
+
+  const i = document.createElement('i');
+  i.className = 'fa-solid fa-check';
+
+  const dateSpan = document.createElement('span');
+  dateSpan.className = 'date';
+  dateSpan.textContent = date;
+
+  li.appendChild(input);
+  li.appendChild(i);
+  li.appendChild(dateSpan);
+
+  return li;
+}
+
+// List item
+function createListItem(text, date) {
   const li = document.createElement('li');
   li.className = 'list-item';
 
@@ -98,7 +127,7 @@ function createListItem(text) {
 
   const dateSpan = document.createElement('span');
   dateSpan.className = 'date';
-  dateSpan.textContent = getFormattedDate();
+  dateSpan.textContent = date;
 
   li.appendChild(textSpan);
   li.appendChild(i);
@@ -107,30 +136,8 @@ function createListItem(text) {
   return li;
 }
 
-function createEditModeListItem(text) {
-  const li = document.createElement('li');
-  li.className = 'list-item';
-
-  const input = document.createElement('input');
-  input.type = 'text';
-  input.className = 'edit-mode';
-  input.value = text;
-  input.maxLength = '12';
-
-  const i = document.createElement('i');
-  i.className = 'fa-solid fa-check';
-
-  const dateSpan = document.createElement('span');
-  dateSpan.className = 'date';
-  dateSpan.textContent = getFormattedDate();
-
-  li.appendChild(input);
-  li.appendChild(i);
-  li.appendChild(dateSpan);
-
-  return li;
-}
-
+// Action functions
+// Item sorting function
 function sortItems(e) {
   // getting sort option
   const sortOption = e.target.value;
@@ -174,7 +181,7 @@ function sortItems(e) {
 }
 
 // Function to check the state of the shopping list
-function isItemListEmpty() {
+function areAllItemsNotDisplayed() {
   const itemList = document.querySelector('ul.shopping-list');
 
   const items = itemList.querySelectorAll('.list-item');
@@ -209,7 +216,7 @@ function filterItems() {
   const h2 = itemList.querySelector('h2.empty');
 
   // if item list is empty and h2 is absent
-  if (isItemListEmpty() && !h2) {
+  if (areAllItemsNotDisplayed() && !h2) {
     const h2 = document.createElement('h2');
     h2.className = 'empty';
     h2.textContent = 'Empty List';
@@ -217,59 +224,92 @@ function filterItems() {
     itemList.appendChild(h2);
 
     // if item list is not empty but h2 still persist
-  } else if (!isItemListEmpty() && h2) {
+  } else if (!areAllItemsNotDisplayed() && h2) {
     itemList.querySelector('h2').remove();
   }
 }
 
-// item list remove function (by 'X' icon)
+// Function to remove list item when clicking 'X' icon
 function removeListItem(e) {
   const list = document.querySelector('.shopping-list');
-  // if our target is 'X' econ, remove parent element (which is list item)
-  if (e.target.tagName === 'I' && e.target.className === 'fa-solid fa-xmark') {
-    e.target.parentElement.remove();
-    // if list is empty, remove whole context UI
+  const item = e.target;
+  // if our target is 'X' icon
+  if (item.tagName === 'I' && item.className === 'fa-solid fa-xmark') {
+    // removing parent element
+    const listItem = e.target.parentElement;
+
+    // as well as the element in the local storage
+    const text = listItem.querySelector('span.text').textContent;
+    const date = listItem.querySelector('span.date').textContent;
+    removeItemFromLocalStorage(text, date);
+
+    listItem.remove();
+
+    // if list is empty, remove list context
     if (list.children.length === 0) {
       clearContext();
     }
   }
 }
 
-function saveEditOnBlur(e) {
-  if (
-    e.currentTarget.tagName === 'INPUT' &&
-    e.currentTarget.className === 'edit-mode'
-  ) {
-    const editItem = e.currentTarget;
-    const text = editItem.value;
-    if (text) {
-      editItem.parentElement.replaceWith(createListItem(text));
-    } else {
-      editItem.parentElement.remove();
-      if (document.querySelector('.shopping-list').children.length === 0) {
-        clearContext();
-      }
-    }
-  }
+// Function to remove all list items
+function removeAllListItems() {
+  const list = document.querySelector('.shopping-list');
+
+  listItems = list.querySelectorAll('li');
+
+  listItems.forEach((item) => {
+    const text = item.querySelector('span.text').textContent;
+    const date = item.querySelector('span.date').textContent;
+    removeItemFromLocalStorage(text, date);
+
+    item.remove();
+  });
+
+  clearContext();
 }
 
-// function to edit items on click
-function editItem(e) {
+// function saveEdit(e)
+
+// list item edit mode function
+function turnEditMode(e) {
   const item = e.target;
 
   if (item.tagName === 'LI' && item.className === 'list-item') {
-    let text = item.querySelector('.text').textContent;
+    const itemText = item.querySelector('span.text').textContent;
+    const itemDate = item.querySelector('span.date').textContent;
 
-    const editModeItem = createEditModeListItem(text);
-    const input = editModeItem.querySelector('.edit-mode');
+    const editModeListItem = createEditModeListItem(itemText, itemDate);
+    const input = editModeListItem.querySelector('input');
 
-    item.replaceWith(editModeItem);
+    item.replaceWith(editModeListItem);
     input.focus();
-    input.addEventListener('blur', saveEditOnBlur);
+
+    input.addEventListener('blur', function () {
+      const newText = input.value;
+      item.querySelector('span.text').textContent = newText;
+
+      localStorageItems = getItemsFromLocalStorage();
+      for (let i = 0; i < localStorageItems.length; i++) {
+        const [LSItemText, LSItemDate] = localStorageItems[i];
+        // potential bug spot
+        // there could be list items with the same text and date
+        if (LSItemText === itemText && LSItemDate === itemDate) {
+          localStorageItems[i] = [newText, itemDate];
+          break;
+        }
+      }
+
+      localStorage.setItem('items', JSON.stringify(localStorageItems));
+
+      editModeListItem.replaceWith(item);
+      editModeListItem.remove();
+    });
   }
 }
 
-// function that fills context with UI
+// Function that fills shopping list context
+// with UI items
 function fillContext() {
   const sortField = createSortField();
   sortField.addEventListener('change', sortItems);
@@ -278,59 +318,93 @@ function fillContext() {
   filterField.addEventListener('input', filterItems);
 
   const list = createList();
+  // function to remove list item on 'X' icon click
   list.addEventListener('click', removeListItem);
-  list.addEventListener('click', editItem);
+  // function to edit list item on click
+  list.addEventListener('click', turnEditMode);
 
   const clearButton = createClearButton();
-  clearButton.addEventListener('click', clearContext);
+  clearButton.addEventListener('click', removeAllListItems);
 
   listContext.appendChild(sortField);
   listContext.appendChild(filterField);
   listContext.appendChild(list);
   listContext.appendChild(clearButton);
-
-  contextPersist = true;
 }
 
-// Adding list item to the shopping list
+// Function to check the state
+// of the shopping list context
+function contextExists() {
+  return listContext.children.length !== 0;
+}
+
+function getItemsFromLocalStorage() {
+  let itemsFromStorage;
+
+  if (localStorage.getItem('items') === null) {
+    itemsFromStorage = new Array();
+  } else {
+    itemsFromStorage = JSON.parse(localStorage.getItem('items'));
+  }
+
+  return itemsFromStorage;
+}
+
+function addItemToLocalStorage(text, date) {
+  let itemsFromStorage = getItemsFromLocalStorage();
+
+  itemsFromStorage.push([text, date]);
+
+  localStorage.setItem('items', JSON.stringify(itemsFromStorage));
+}
+
+function removeItemFromLocalStorage(text, date) {
+  console.log('running this command');
+  let itemsFromStorage = getItemsFromLocalStorage();
+
+  itemsFromStorage = itemsFromStorage.filter(([itemText, itemDate]) => {
+    return itemText !== text || itemDate !== date;
+  });
+
+  localStorage.setItem('items', JSON.stringify(itemsFromStorage));
+}
+
+// Function to add list item to the shopping list
 function addListItem(text) {
   const list = document.getElementById('shopping-list');
+  const timeOfCreation = getFormattedDate();
 
-  list.appendChild(createListItem(text));
+  addItemToLocalStorage(text, timeOfCreation);
+  const newItem = createListItem(text, timeOfCreation);
+  list.appendChild(newItem);
 }
 
-// function for context UI removal
+// Function to remove list context
 function clearContext() {
   Array.from(listContext.children).forEach((child) => {
     child.remove();
   });
-  contextPersist = false;
 }
-
-// Variable to check the state of context UI
-let contextPersist = false;
-
 // DOM elements
-const listContext = document.getElementById('list-context');
 const userInput = document.getElementById('text');
 const submitButton = document.getElementById('submit');
+const listContext = document.getElementById('list-context');
 
-// submit button event listener
+// Submit button event listener to add new item
 submitButton.addEventListener('click', function (e) {
   e.preventDefault();
 
   const newItem = userInput.value;
   userInput.value = '';
 
-  // If item input is empty, warn user
   if (newItem === '') {
     alert('Enter any item in the field.');
     return;
   }
 
-  // First, we gotta fill the context UI, if it is absent
-  if (!contextPersist) {
-    // filling context UI, and only then adding list item
+  // First, we are going to fill the context UI, if it is absent
+  if (!contextExists()) {
+    // Filling context UI, and only then adding list item
     fillContext();
     addListItem(newItem);
   } else {
@@ -339,4 +413,18 @@ submitButton.addEventListener('click', function (e) {
   }
 });
 
-submitButton.addEventListener('click', filterItems);
+// Load all the items from local storage if any is there
+document.addEventListener('DOMContentLoaded', function () {
+  const items = getItemsFromLocalStorage();
+
+  if (items.length !== 0) {
+    fillContext();
+
+    list = document.querySelector('.shopping-list');
+
+    items.forEach(([itemText, itemDate]) => {
+      newItem = createListItem(itemText, itemDate);
+      list.appendChild(newItem);
+    });
+  }
+});

@@ -136,6 +136,7 @@ main.main-content {
       display: flex;
       column-gap: 10px;
       flex-wrap: wrap;
+      margin-bottom: 40px;
     }
 
     /* Empty List Heading Styling */
@@ -162,6 +163,10 @@ main.main-content {
       font-weight: 600;
     }
 
+    .shopping-list li:has(input.edit-mode) {
+      background-color: #f1f1f1;
+    }
+
     li input.edit-mode {
       border: none;
       outline: none;
@@ -184,6 +189,10 @@ main.main-content {
       cursor: pointer;
     }
 
+    .shopping-list li span.text {
+      margin-left: 2px;
+    }
+
     .shopping-list li span.date {
       position: absolute;
       top: -15px;
@@ -194,7 +203,6 @@ main.main-content {
 
     /* Clear button styling */
     .clear-button .clear-btn {
-      margin-top: 40px;
       border: 1px solid var(--tertiary-dark);
       outline: none;
       padding: 10px 0;
